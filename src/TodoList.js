@@ -1,18 +1,18 @@
 import React from "react";
 import TodoListItem from "./TodoListItem";
 
-const toDoList = [
+const todoList = [
     {id: 1, title: "Wake up"},
     {id: 2, title: "Drink water"},
     {id: 3, title: "Brush teeth"}
   ];
 
-function TodoList() {
+function TodoList(props) {
     return (
-        <div style={{ textAlign: 'left', backgroundColor: "aquamarine" }}>
+        <div style={{ textAlign: 'left'}}>
             <ul>
-                {toDoList.map(function (todo) {
-                return <TodoListItem key={todo.id} todo={todo} />;
+                {props.todoList.map((todo) => {
+                    return <TodoListItem key={todo.id} todo={todo} />;
                 })}
             </ul>
           </div>

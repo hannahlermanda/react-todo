@@ -7,13 +7,11 @@ const todoList = [
     {id: 3, title: "Brush teeth"}
   ];
 
-function TodoList(props) {
+function TodoList({todoList}) {
     return (
         <div style={{ textAlign: 'left'}}>
             <ul>
-                {props.todoList.map((todo) => {
-                    return <TodoListItem key={todo.id} todo={todo} />;
-                })}
+                {todoList.map(todo => <TodoListItem key={todo.id} todo={todo}/>)}
             </ul>
           </div>
     );

@@ -1,24 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TodoList from './TodoList';
 import AddTodoForm from './AddtodoForm';
 import "./style.css"
 
+function useSemiPersistentState(){
+
+  let savedTodoList = localStorage.getItem("savedTodoList");
+  let [todoList, setTodoList] = React.useState(JSON.parse(savedTodoList || '[]'));
+
+  useEffect(() => {
+    localStorage.setItem("savedTodoList", JSON.stringify(todoList));
+  }, [todoList]);
+
+  return [todoList, setTodoList];
+
+}
+
 function App() {
 
-  let [todoList, setTodoList] = React.useState([]);
+  const [todoList, setTodoList] = useSemiPersistentState();
 
-  function addTodo (newTodo){
-    setTodoList(existingTodoList => [...existingTodoList, newTodo]);
+  function addTodo (newTodo) {
+    setTodoList([...todoList, newTodo]);
   }
 
   return (
-      <header>
+      <>
         <div style={{ textAlign: 'center', backgroundColor: "blue" }}>
           <h1> To-Do List </h1>
         </div>
         <AddTodoForm onAddTodo={addTodo} />
         <TodoList todoList={todoList} />
-      </header>
+      </>
   );
 }
 

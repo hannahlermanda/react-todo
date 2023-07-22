@@ -7,11 +7,11 @@ const todoList = [
     {id: 3, title: "Brush teeth"}
   ];
 
-function TodoList({todoList}) {
+function TodoList({todoList, onRemoveTodo}) {
     return (
         <div style={{ textAlign: 'left'}}>
             <ul>
-                {todoList.map(todo => <TodoListItem key={todo.id} todo={todo}/>)}
+                {todoList.map(todo => <TodoListItem key={todo.id} todo={todo} onRemoveTodo={onRemoveTodo} />)}
             </ul>
           </div>
     );

@@ -1,34 +1,92 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TodoList from './TodoList.js';
 import AddTodoForm from './AddtodoForm.js';
 import './style.css';
 
 function App() {
-  let savedTodoList = localStorage.getItem('savedTodoList');
-  let [todoList, setTodoList] = React.useState(JSON.parse(savedTodoList || '[]'));
-  let [isLoading, setIsLoading] = React.useState(true);
+  const [todoList, setTodoList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    async function fetchData() {
+      const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
+      const options = {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`,
+        },
+      };
+
+      try {
+        const response = await fetch(url, options);
+
+        if (response.ok === false) {
+          throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const todos = data.records.map((record) => ({
+          title: record.fields.Title,
+          id: record.id,
+        }));
+
+        setTodoList(todos);
+        setIsLoading(false);
+
+        return data;
+      } catch (error) {
+        console.error('Error fetching data:', error.message);
+        return null;
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem('savedTodoList', JSON.stringify(todoList));
   }, [todoList]);
 
-  React.useEffect(() => {
-    new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve({ data: { todoList: todoList } });
-      }, 2000);
-    }).then((result) => {
-      setTodoList(result.data.todoList || []);
-      setIsLoading(false);
-    });
-  }, []);
+  async function createRecordInAirtable(newTodo) {
+    const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
+    const options = {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fields: {
+          Title: newTodo.title,
+        },
+      }),
+    };
 
-  function addTodo (newTodo) {
-    setTodoList([...todoList, newTodo]);
+    try {
+      const response = await fetch(url, options);
+
+      if (response.ok === false) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Created record in Airtable:', data);
+
+      return data;
+    } catch (error) {
+      console.error('Error creating record in Airtable:', error.message);
+      return null;
+    }
   }
 
-  function removeTodo (id) {
-    setTodoList(todoList.filter(todo => todo.id !== id));
+  function addTodo(newTodo) {
+    setTodoList([...todoList, newTodo]);
+    createRecordInAirtable(newTodo);
+  }
+
+  function removeTodo(id) {
+    setTodoList(todoList.filter((todo) => todo.id !== id));
   }
 
   return (
@@ -37,7 +95,7 @@ function App() {
         <h1> To-Do List </h1>
       </div>
       <AddTodoForm onAddTodo={addTodo} />
-        {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
+      {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
     </>
   );
 }

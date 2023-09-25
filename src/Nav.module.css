@@ -1,0 +1,39 @@
+.navLinks a{
+    color: azure;
+    list-style-type: none;
+    text-decoration-line: none;
+}
+
+.navLinks a:hover{
+    color: gold;
+}
+
+.navLinks{
+    display: flex;
+    list-style: none; 
+    justify-content: space-around;
+    font-size: 25px;
+}
+
+nav{
+    background-color: blue;
+    padding: 20px;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+@media screen and (max-width:585px) {
+    .navLinks{
+        font-size: 20px;
+    }
+    
+} 
+
+@media screen and (max-width:485px) {
+    .navLinks{
+        flex-direction: column;
+        text-align: center;
+    }
+    
+} 

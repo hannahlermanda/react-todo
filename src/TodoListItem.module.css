@@ -1,0 +1,46 @@
+.ListItem{
+    display: flex;
+    justify-content: space-between;
+    margin: 11px;
+    color: gold;
+    list-style-type: none;
+    padding: 0;
+    font-size: 30px;
+    background-color: purple;
+}
+
+.TaskCompleted {
+    text-decoration: line-through;
+    color: green;
+    background-color: aliceblue;
+}
+
+.removeButton{
+    color: black;
+    text-decoration: none;
+}
+
+.checkbox:hover{
+    cursor: pointer;
+}
+
+@media screen and (max-width: 500px){
+    .ListItem{
+        font-size: 25px;
+    }
+    
+}
+
+@media screen and (max-width: 435px){
+    .ListItem{
+        font-size: 20px;
+    }
+    
+}
+
+@media screen and (max-width: 350px){
+    .ListItem{
+        font-size: 18px;
+    }
+    
+}

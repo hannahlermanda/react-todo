@@ -14,15 +14,17 @@ function InputWithLabel(props) {
     return (
       <>
         <label htmlFor="todoTitle">{children}</label>
-        <input
-          ref={inputRef}
-          id="todoTitle"
-          type="text"
-          name="title"
-          value={value} 
-          onChange={onChange}
-        />
-        <button type="submit">Add</button>
+        <div>
+          <input
+            ref={inputRef}
+            id="todoTitle"
+            type="text"
+            name="title"
+            value={value} 
+            onChange={onChange}
+          />
+          <button type="submit">Add</button>
+        </div>
       </>
     );
   }

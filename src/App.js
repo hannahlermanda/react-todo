@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import TodoList from './TodoList.js';
 import AddTodoForm from './AddtodoForm.js';
-import './style.css';
+import Navigation from './Nav.js'
+import style from './App.module.css'
 
 function App() {
   const [todoList, setTodoList] = useState([]);
@@ -90,16 +91,30 @@ function App() {
     setTodoList(todoList.filter((todo) => todo.id !== id));
   }
 
+  function updateCompletion(updatedTodo) {
+    // Find the index of the updated todo in todoList
+    const index = todoList.findIndex((todo) => todo.id === updatedTodo.id);
+  
+    if (index !== -1) {
+      // Create a new copy of todoList with the updated todo
+      const updatedTodoList = [...todoList];
+      updatedTodoList[index] = updatedTodo;
+  
+      setTodoList(updatedTodoList);
+    }
+  }
+
   return (
     <BrowserRouter>
+      <Navigation />
       <Routes>
         <Route path="/" element={
           <>
-            <div style={{ textAlign: 'center', backgroundColor: 'blue' }}>
-              <h1> To-Do List </h1>
+            <div style={{ textAlign: 'center'}}>
+              <h1 className={style.header}> To-Do List </h1>
             </div>
             <AddTodoForm onAddTodo={addTodo} />
-            {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
+            {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} onUpdateCompletion={updateCompletion}/>}
           </>
         } />
         <Route path="/new" element={<h1>New Todo List</h1>} />

@@ -1,6 +1,7 @@
 import React from "react";
 import TodoListItem from "./TodoListItem";
 import style from "./TodoList.module.css"; 
+import PropTypes from 'prop-types';
 
 const todoList = [
     {id: 1, title: "Wake up"},
@@ -20,5 +21,14 @@ function TodoList({todoList, onRemoveTodo, onUpdateCompletion}) {
           </div>
     );
 }
+
+TodoList.propTypes = {
+    todoList: PropTypes.arrayOf(PropTypes.shape({ 
+        id: PropTypes.string,
+        title: PropTypes.string,
+    })).isRequired,
+    onRemoveTodo: PropTypes.func, 
+    onUpdateCompletion: PropTypes.func, 
+};
 
 export default TodoList;

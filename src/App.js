@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import TodoList from './TodoList.js';
-import AddTodoForm from './AddtodoForm.js';
-import Navigation from './Nav.js'
+import TodoList from './components/TodoList';
+import AddTodoForm from './components/AddtodoForm';
+import Navigation from './components/Nav'
 import style from './App.module.css'
 
 function App() {

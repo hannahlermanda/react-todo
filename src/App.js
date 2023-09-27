@@ -192,6 +192,31 @@ function App() {
     });
   }
 
+  async function removeTodo(id) {
+    try {
+      // Make a DELETE request to the Airtable API to remove the record
+      const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}/${id}`;
+      const options = {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`,
+        },
+      };
+
+      const response = await fetch(url, options);
+
+      if (!response.ok) {
+        throw new Error(`Error deleting record: ${response.status}`);
+      }
+
+      // If the record is successfully deleted from Airtable, remove it from the local state
+      setTodoList((prevTodoList) => prevTodoList.filter((todo) => todo.id !== id));
+    } catch (error) {
+      console.error('Error deleting record:', error.message);
+    }
+  }
+
+
   return (
     <BrowserRouter>
       <Navigation onToggleSortOrder={toggleSortOrder}/>

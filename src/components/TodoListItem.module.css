@@ -2,21 +2,21 @@
     display: flex;
     justify-content: space-between;
     margin: 11px;
-    color: gold;
+    color: #FFEC51;
     list-style-type: none;
     padding: 0;
     font-size: 30px;
-    background-color: purple;
+    background-color: #A4036F;
 }
 
 .TaskCompleted {
     text-decoration: line-through;
-    color: green;
-    background-color: aliceblue;
+    color: #248232;
+    background-color: #1B1B1E;
 }
 
 .removeButton{
-    color: black;
+    color: #1B1B1E;
     text-decoration: none;
 }
 

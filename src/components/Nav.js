@@ -12,13 +12,14 @@ function scrollToTarget() {
 }
 
 
-function Navigation() {
+function Navigation({onToggleSortOrder}) {
+  console.log('Navigation component rendered');
   return (
     <nav>
       <ul className={style.navLinks}>
         <li><Link to="/">Home</Link></li>
         <li><Link to="#enterNewTask" onClick={scrollToTarget}>Add New To-Do</Link></li>
-        <li><Link to="/completed">Completed To-Do's</Link></li>
+        <li><button  onClick={onToggleSortOrder} >Toggle Sort Order</button></li>
       </ul>
     </nav>
   );

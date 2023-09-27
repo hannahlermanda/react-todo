@@ -8,10 +8,19 @@ import style from './App.module.css'
 function App() {
   const [todoList, setTodoList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  //Default to ascending order (A-Z)
+  const [sortOrder, setSortOrder] = useState('asc'); 
 
   useEffect(() => {
     async function fetchData() {
-      const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
+      
+       // Define the query parameters for sorting
+      const queryParams = new URLSearchParams({
+        'sort[0][field]': 'Title',
+        'sort[0][direction]': 'asc',
+      });
+      
+      const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?${queryParams}`;
       const options = {
         method: 'GET',
         headers: {
@@ -27,6 +36,31 @@ function App() {
         }
 
         const data = await response.json();
+
+        // Sort by "Title"
+        data.records.sort((recordA, recordB) => {
+          const titleA = recordA.fields.Title.toUpperCase();
+          const titleB = recordB.fields.Title.toUpperCase();
+
+          if (sortOrder === 'asc') {
+            if (titleA < titleB) {
+              return -1;
+            } else if (titleA > titleB) {
+              return 1;
+            } else {
+              return 0;
+            }
+          } else {
+            // Descending order
+            if (titleA > titleB) {
+              return -1;
+            } else if (titleA < titleB) {
+              return 1;
+            } else {
+              return 0;
+            }
+          }
+        });
 
         const todos = data.records.map((record) => ({
           title: record.fields.Title,
@@ -104,9 +138,36 @@ function App() {
     }
   }
 
+  function toggleSortOrder() {
+    const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    console.log('Toggle Sort Order function called');
+    console.log('New Sort Order:', newSortOrder);
+  
+    // Sort List
+    const sortedTodoList = [...todoList].sort((todoA, todoB) => {
+      const titleA = todoA.title.toUpperCase();
+      const titleB = todoB.title.toUpperCase();
+  
+      if (newSortOrder === 'asc') {
+        if (titleA < titleB) return -1;
+        if (titleA > titleB) return 1;
+        return 0;
+      } else {
+        if (titleA < titleB) return 1;
+        if (titleA > titleB) return -1;
+        return 0;
+      }
+    });
+  
+    console.log('Sorted Todo List:', sortedTodoList);
+  
+    setSortOrder(newSortOrder);
+    setTodoList(sortedTodoList);
+  }
+
   return (
     <BrowserRouter>
-      <Navigation />
+      <Navigation onToggleSortOrder={toggleSortOrder}/>
       <Routes>
         <Route path="/" element={
           <>

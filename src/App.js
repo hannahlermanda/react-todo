@@ -194,7 +194,7 @@ function App() {
 
   async function removeTodo(id) {
     try {
-      // Make a DELETE request to the Airtable API to remove the record
+      //Delete record from Airtable
       const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}/${id}`;
       const options = {
         method: 'DELETE',
@@ -209,7 +209,7 @@ function App() {
         throw new Error(`Error deleting record: ${response.status}`);
       }
 
-      // If the record is successfully deleted from Airtable, remove it from the local state
+      // Adjust local state after deleting record
       setTodoList((prevTodoList) => prevTodoList.filter((todo) => todo.id !== id));
     } catch (error) {
       console.error('Error deleting record:', error.message);

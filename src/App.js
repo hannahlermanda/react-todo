@@ -10,6 +10,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   //Default to ascending order (A-Z)
   const [sortOrder, setSortOrder] = useState('asc'); 
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -78,6 +79,24 @@ function App() {
     }
 
     fetchData();
+  }, []);
+
+   //Scroll to Top Function
+   function handleScroll() {
+    if (window.scrollY >= 200) {
+      setShowScrollToTop(true);
+    } else {
+      setShowScrollToTop(false);
+    }
+  }
+  
+  //Scroll Event Listener
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -165,6 +184,14 @@ function App() {
     setTodoList(sortedTodoList);
   }
 
+  // Function to scroll to the top of the page
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }
+
   return (
     <BrowserRouter>
       <Navigation onToggleSortOrder={toggleSortOrder}/>
@@ -180,6 +207,11 @@ function App() {
         } />
         <Route path="/new" element={<h1>New Todo List</h1>} />
       </Routes>
+      {showScrollToTop && (
+        <button className={style.scrollToTopButton} onClick={scrollToTop}>
+          Scroll to Top
+        </button>
+      )}
     </BrowserRouter>
   );
 }

@@ -34,3 +34,20 @@ button:hover{
     background-color: #1B1B1E;
     color: azure;
 }
+
+.scrollToTopButton {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: rgba(0,139,248, .8);
+    color: azure;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    z-index: 999;
+  }
+  
+  .scrollToTopButton:hover {
+    background-color: #0056b3;
+  }
